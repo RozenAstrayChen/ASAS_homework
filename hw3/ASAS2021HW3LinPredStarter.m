@@ -23,7 +23,7 @@ if L<=p
     disp('Linear prediction requires the num of equations to be greater than the number of variables.');
 end
 
-sw.emphasis = 1; % default = 1
+sw.emphasis = 0; % default = 1
 sw.visOnly = 0; % Visualize the signal only. default = 0.
 
 numFrames = floor(length(y)/L); % frame rate
@@ -46,11 +46,11 @@ end
 %% Linear prediction and smooth synthesis of the estimated source e_n
 win = ones(L,1); % Rectangular window.
 
-for kk = 1:numFrames % frame index
+for kk = 1:numFrames
     ind = (kk-1)*L+1:kk*L; % pointing to a frame of length L
     ywin = y_emph(ind).*win;
     % ------------------
-    A = lpc(ywin,p); %  LPC is the main function to use. Do not change.
+    A = lpc(ywin, p); %  LPC is the main function to use. Do not change.
     %A = levinson(ywin, p);
     %-------------------
     if sw.visOnly
@@ -59,13 +59,11 @@ for kk = 1:numFrames % frame index
         %%% WRITE YOUR CODE HERE and fill excitat(ind) nicely.
         %%% ...
         y_estm = filter([0 -A(2:end)], 1, ywin);
-        
         e= ywin-y_estm;  %% errors
         gain(kk)=sqrt(sum(e(1:length(e)).^2)/length(e));%%sqrt(MSE)
         
     end
     e_n(p+1:end) = y_estm;
-    
     Y = fft(ywin,2*Nfreqs);
 %% Data visualization
     figure(1);
@@ -103,8 +101,8 @@ end
 % the sound should lack the original vowel quality in x[n].
 x_n_hat = zeros(1, length(y));
 
-for kk=1:L:numFrames
-    w=filter(1,[1 A((kk+1):(kk+1+p-1))],gain(kk));
+for kk=1:L:(length(gain))
+    w = filter(1,[1 A((kk+1):(kk+1+p-1))],gain(kk));
     y_hat(kk:kk+L-1) = w; 
 end
 
