@@ -1,48 +1,52 @@
-hw1_1e()
-function hw1_1abc()
-    M = 8000;
-    fs = 16000;
-    T = 1/fs;
-    f0 = 2000;
-    n = (0:1.0:2*M-1);
-    y = zeros(fs, 1);
-    % a, b, c
-    for i=1:2*M-1
-        y(i) = y_func(n(i), M, f0, T, 0, 0);
-    end
-    plot(n, y);
-    soundsc(y, fs)    
+%abc
+%{
+M = 8000;
+fs = 16000;
+T = 1/fs;
+f0 = 1000;
+n = (0:1.0:2*M-1);
+y = zeros(fs, 1);
+% a, b, c
+for i=1:2*M-1
+    y(i) = y_func(n(i), M, f0, T, 0, 1);
 end
+plot(n, y);
+%soundsc(y, fs)    
+%}
 
-function hw1_1d()
-    M = 8000;
-    fs = 16000;
-    T = 1/fs;
-    f0 = 2000;
-    n = (0:1.0:2*M-1);
-    % d
-    y = zeros(fs, 1);
-    for i=1:2*M-1
-        y(i) = y_func(n(i), M, f0, T, 1, 0);
-    end
-    plot(n, y);
-    soundsc(y, fs)
+%d
+%{
+M = 8000;
+fs = 16000;
+T = 1/fs;
+f0 = 2000;
+n = (0:1.0:2*M-1);
+% d
+y = zeros(fs, 1);
+for i=1:2*M-1
+    y(i) = y_func(n(i), M, f0, T, 1, 0);
 end
+plot(n, y);
+soundsc(y, fs)
 
-function hw1_1e()
-    M = 8000;
-    fs = 16000;
-    T = 1/fs;
-    f0 = 2000;
-    n = (0:1.0:2*M-1);
-    % d
-    y = zeros(fs, 1);
-    for i=1:2*M-1
-        y(i) = y_func(n(i), M, f0, T, 1, 1);
-    end
-    plot(n, y);
-    soundsc(y, fs)
+%}
+
+%e
+
+%{
+M = 8000;
+fs = 16000;
+T = 1/fs;
+f0 = 2000;
+n = (0:1.0:2*M-1);
+% d
+y = zeros(fs, 1);
+for i=1:2*M-1
+    y(i) = y_func(n(i), M, f0, T, 0, 1);
 end
+plot(n, y);
+soundsc(y, fs)
+%}
 
 function out = g_func(n, M, g_type)
     if ((-M <= n) && (n <= M))

@@ -23,13 +23,23 @@ for n = 1:N
 end
 
 figure(1);
-%s = spectrogram(y);
-
+s = spectrogram(y);
 spectrogram(y, w, 'yaxis');
 
 figure(2)
 imagesc(abs(Y));
 %}
+
+%b
+
+[y, fs] = audioread("sample1.mp3");
+h_size = 320;
+window = hanning(h_size);
+
+figure(1);
+spectrogram(y(:, 2), window);
+colorbar
+
 
 function out = g_func(n, M)
     if ((-M <= n) && (n <= M))

@@ -7,21 +7,22 @@ M = 8000;
 fs = 16000;
 N = 16000
 T = 1/fs;
-f0 = 2000;
-n = 1:N;
+f0 = 1000;
+n = (0:1.0:2*M-1);
 y = zeros(fs, 1);
 % a, b, c
 for i=1:2*M-1
     y(i) = y_func(n(i), M, f0, T);
 end
 
-Y = fft(y);
-Y = 20 * log10(abs(Y));
-f = ((0:1.0:length(y)-1)/N)*fs;
+%Y = fft(y, length(y));
+Y = abs(fft(y));
+%f = ((0:1.0:length(y)-1)/N)*fs;
 figure
-plot(f, Y)
-%soundsc(y, fs)  
+plot(0:fs-1, Y)
+%soundsc(y, fs)    
 %}
+
 %b
 %{
 M = 8000;
