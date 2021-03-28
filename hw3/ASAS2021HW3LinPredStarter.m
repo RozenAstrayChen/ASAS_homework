@@ -23,7 +23,7 @@ if L<=p
     disp('Linear prediction requires the num of equations to be greater than the number of variables.');
 end
 
-sw.emphasis = 1; % default = 1
+sw.emphasis = 0; % default = 1
 sw.visOnly = 0; % Visualize the signal only. default = 0.
 
 numFrames = floor(length(y)/L); % frame rate
@@ -49,10 +49,11 @@ ext_ind = 1:L+p
 % reference
 % win_ola -> overlap 
 for kk = 1:numFrames % frame index
+
     ind = (kk-1)*L+1:kk*L; % pointing to a frame of length L
     ywin = y_emph(ind).*win;
     % ------------------
-    A = lpc(ywin,p); %  LPC is the main function to use. Do not change.
+    A = lpc(ywin, p); %  LPC is the main function to use. Do not change.
     %A = levinson(ywin, p);
     %-------------------
     if sw.visOnly
@@ -70,6 +71,7 @@ for kk = 1:numFrames % frame index
         
     end
     
+
     Y = fft(ywin,2*Nfreqs);
 %% Data visualization
     figure(1);
@@ -110,6 +112,7 @@ end
 %    w=filter(1,[1 A((kk+1):(kk+1+p-1))],gain(kk));
 %    y_hat(kk:kk+L-1) = w; 
 %end
+
 
 
 soundsc(excitat,fs); 
