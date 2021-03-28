@@ -45,7 +45,9 @@ end
 
 %% Linear prediction and smooth synthesis of the estimated source e_n
 win = ones(L,1); % Rectangular window.
-
+ext_ind = 1:L+p
+% reference
+% win_ola -> overlap 
 for kk = 1:numFrames % frame index
     ind = (kk-1)*L+1:kk*L; % pointing to a frame of length L
     ywin = y_emph(ind).*win;
@@ -58,13 +60,15 @@ for kk = 1:numFrames % frame index
     else
         %%% WRITE YOUR CODE HERE and fill excitat(ind) nicely.
         %%% ...
-        y_estm = filter([0 -A(2:end)], 1, ywin);
+        %e_n = filter([0 -A(2:end)], 1, ywin);
+        %e_n = filter(A, [1], ywin(1:L));
+        e_n = filter(A(1:end), 1, cat(1, ywin, zeros(p, 1)));
+        excitat(ind(1):ind(end-p)) = e_n(p+1:L);
         
-        e= ywin-y_estm;  %% errors
-        gain(kk)=sqrt(sum(e(1:length(e)).^2)/length(e));%%sqrt(MSE)
+        %e = ywin-y_estm;  %% errors
+        %gain(kk)=sqrt(sum(e(1:length(e)).^2)/length(e));%%sqrt(MSE)
         
     end
-    e_n(p+1:end) = y_estm;
     
     Y = fft(ywin,2*Nfreqs);
 %% Data visualization
@@ -101,15 +105,14 @@ end
 %% [INVESTIGATE] play the estimated source signal.
 % With a proper choice of LP order, frame length, and the pre-emphasis filter coefficient, 
 % the sound should lack the original vowel quality in x[n].
-x_n_hat = zeros(1, length(y));
 
-for kk=1:L:numFrames
-    w=filter(1,[1 A((kk+1):(kk+1+p-1))],gain(kk));
-    y_hat(kk:kk+L-1) = w; 
-end
+%for kk=1:L:numFrames*2
+%    w=filter(1,[1 A((kk+1):(kk+1+p-1))],gain(kk));
+%    y_hat(kk:kk+L-1) = w; 
+%end
 
 
-soundsc(y_hat,fs); 
+soundsc(excitat,fs); 
 
 setFontSizeForAll(18); % This function is a plotting routine I created. 
                         % It goes through all the figures and set the font
