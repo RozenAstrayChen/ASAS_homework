@@ -45,7 +45,6 @@ end
 
 %% Linear prediction and smooth synthesis of the estimated source e_n
 win = ones(L,1); % Rectangular window.
-ext_ind = 1:L+p
 % reference
 % win_ola -> overlap 
 for kk = 1:numFrames % frame index
@@ -120,3 +119,6 @@ soundsc(excitat,fs);
 setFontSizeForAll(18); % This function is a plotting routine I created. 
                         % It goes through all the figures and set the font
                         % the same size.
+                        
+time=(1:length(y))/fs;
+plot(time, excitat)
