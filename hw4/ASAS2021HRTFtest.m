@@ -30,11 +30,17 @@ hrirdir = sprintf('./%s/elev%d/',subject,elev);
 lhrir = zeros(512,1);
 rhrir = zeros(512,1);
 
+
+%{
+Left sounds
+%}
 hrirname = sprintf('%s/L%de%03da.dat',hrirdir,elev,azim);
 fid = fopen(hrirname,'r','b');
 lhrir = fread(fid,'float');
 fclose(fid);
-
+%{
+Right sounds
+%}
 if azim==0 % Originally provided by colleagues at Tohoku. This is probably due to
     % their file-naming convention. Do not change.
     hrirname = sprintf('%s/R%de%03da.dat',hrirdir,elev,azim);
@@ -54,7 +60,13 @@ l=conv(noise,lhrir);
 r=conv(noise,rhrir);
 
 %%%
-L = 2048;
+y = zeros(length(l), 2);
+L = 2048; %block length
+filter_len = length(lhrir);
+Fs = 48000;
+framelen = 0.032;
+numFrames = floor(length(noise)/L); % frame rate
+% window
 win_rec = ones(L,1);
 win_hann = hann(L+1);
 win_hann = win_hann(1:end-1);
@@ -67,14 +79,30 @@ win_hann = win_hann(1:end-1);
 % Save the result as LHRIR and RHRIR, respectively. Now, for each
 % windowed block, calculate the FFT, and multiply it with LHRIR and
 % RHRIR at every frequency. Take the result back to the time domain by
-% ifft. Then hop and overlap appropriately to complete filtering. The
+% ifft. Then hop and overlap appropriately to complete filtering. The0
 % result should be identical to simply using conv(). The results need to be
 % completely free of any frame-rate artifact.
 
-so=[l r];
-sound(so,48000);
+%so=[l r];
+%sound(so,48000);
+for kk = 1:numFrames % frame index
+    ind = (kk-1)*L+1:kk*L;
+    x_win = noise(ind).*win_rec;
+    % choice N_fft = 2048+512-1=2559
+    
+    x_fft = fft(x_win);
+    lh_fft = fft(lhrir);
+    rh_fft = fft(rhrir);
+    
+    lY = conv(x_fft, lh_fft);
+    rY = conv(x_fft, rh_fft);
+    % inverse FFT
+    inverse_lY = ifft(lY);
+    inverse_rY = ifft(rY);
+    y(ind(1):ind(end), 1) = real(inverse_lY(1:L));
+    y(ind(1):ind(end), 2) = real(inverse_rY(1:L));
+end
 
-
-
+sound(y,48000);
 
 %%
