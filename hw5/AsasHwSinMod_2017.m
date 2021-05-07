@@ -77,7 +77,7 @@ state = zeros(maxPeaks,3);  % [ampInitials, freqInitials, phaseInitials]
 state(:,2) = freqs(:,m);
 
 for m=1:nFrames-1
-    tt = (m-1)*R+1: (m+1)*R;  
+    tt = (m-1)*R+1 : (m+1)*R;  
     [y_synth,state] = MyAdditivesynth(amps(:,m),freqs(:,m),R,state);
 	y(tt)= y(tt) + y_synth;
 end
