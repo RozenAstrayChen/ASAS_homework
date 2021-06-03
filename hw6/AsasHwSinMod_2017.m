@@ -86,6 +86,9 @@ ymax = yLIM(2);
 plot((0:nFrames-1)*R/fs,freqs'/pi*ymax,'.','color','g');
 set(gcf,'position',[360,80,800,600])
 %}
+% trajectory formation
+
+plot(fs/(2*pi)*freqs', '.');
 
 %% A baseline synthesizer. You will be asked to do better in HW6.
 %R = round(R* expandRatio);  % time expansion
